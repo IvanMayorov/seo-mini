@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SEO-отчёт</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bar:#8a8a8a;--background:#fff;--foreground:#121212;--card:#fff;--card-border:#e7e7e9;--secondary:#fafafa;--muted:#f0f0f0;--muted-foreground:#757575;--subtle:#a1a1a1;--icon:#aaa;--border:#ededed;--sidebar:#fafafa;--primary:#121212;--primary-foreground:#fff;--info:#0d5fea;--brand:#2575ff;--success:#2f8f24;--warning:#c75500;--danger:#d40f0f;--hover:rgb(18 18 18 / .04);--active:rgb(18 18 18 / .05);--dot:#d9d9d9;--ring:0 0 0 1px var(--card-border);--ring-hover:0 0 0 1px color-mix(in srgb,var(--foreground) 14%,transparent),0 2px 8px rgb(0 0 0 / .05);--focus:0 0 0 1px var(--info),0 0 0 4px rgb(13 95 234 / .14);--pop:0 0 0 1px var(--border),0 4px 12px rgb(0 0 0 / .06),0 12px 32px rgb(0 0 0 / .08);--sans:"Geist",-apple-system,"Segoe UI",system-ui,sans-serif;--mono:"Geist Mono",ui-monospace,"SF Mono",Menlo,monospace}
+:root[data-theme="dark"]{--bar:#77777c;--background:#111112;--foreground:#ededed;--card:#1a1a1b;--card-border:#2a2a2c;--secondary:#161617;--muted:#232325;--muted-foreground:#9a9a9f;--subtle:#6e6e73;--icon:#77777c;--border:#262628;--sidebar:#141415;--primary:#ededed;--primary-foreground:#111112;--brand:#5c97ff;--info:#6ea2ff;--success:#6fd161;--warning:#ff9a4d;--danger:#ff6b6b;--hover:rgb(255 255 255 / .05);--active:rgb(255 255 255 / .07);--dot:#444447;--ring:0 2px 4px 0 rgb(0 0 0 / .25),0 0 0 1px rgb(255 255 255 / .06);--ring-hover:0 4px 12px 0 rgb(0 0 0 / .35),0 0 0 1px rgb(255 255 255 / .1);--pop:0 0 0 1px var(--border),0 12px 32px rgb(0 0 0 / .5)}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--background);color:var(--foreground);font:500 15.5px/1.4 var(--sans);letter-spacing:-.31px;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+button,input{font:inherit;letter-spacing:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0}
+:focus-visible{outline:0;box-shadow:var(--focus);border-radius:8px}
+.app{display:grid;grid-template-columns:260px minmax(0,1fr);min-height:100%}
+.sidebar{background:var(--sidebar);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;display:flex;flex-direction:column;padding:16px 12px}
+.brand{display:flex;align-items:center;gap:10px;padding:4px 8px 18px;font-size:17px;font-weight:600;letter-spacing:-.425px}
+.mark{width:28px;height:28px;border-radius:9px;background:var(--brand);display:grid;place-items:center;color:#fff}
+.side-label{font-size:12.5px;color:var(--muted-foreground);padding:6px 10px}
+.nav{display:flex;flex-direction:column;gap:1px}
+.nav button{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:10px;color:var(--muted-foreground);text-align:left;width:100%}
+.nav button:hover{background:var(--hover);color:var(--foreground)}
+.nav button[aria-current=page]{background:var(--card);color:var(--foreground);box-shadow:var(--ring)}
+.nav svg{width:16px;height:16px;flex:none}
+.nav .n{margin-left:auto;font:400 12.5px var(--mono);color:var(--subtle)}
+.nav button[aria-current=page] .n{color:var(--info)}
+.progress{margin-top:auto;background:var(--card);box-shadow:var(--ring);border-radius:14px;padding:12px 14px}
+.progress .top{display:flex;justify-content:space-between;align-items:baseline}
+.progress .top span:last-child{font:400 14px var(--mono);color:var(--muted-foreground)}
+.dots{display:flex;gap:2px;margin:9px 0 7px}
+.dots i{height:5px;flex:1;border-radius:2px;background:var(--dot)}
+.dots i.on{background:var(--brand)}
+.progress small{font:400 12.5px var(--mono);color:var(--muted-foreground)}
+main{min-width:0}
+.header{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:8px;padding:14px 32px 14px 24px;background:color-mix(in srgb,var(--background) 86%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.crumb{display:flex;gap:8px;align-items:center;color:var(--muted-foreground);min-width:0;white-space:nowrap}
+.crumb b{font-weight:500;color:var(--foreground)}
+.head-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.stamp{font:400 12.5px var(--mono);color:var(--muted-foreground)}
+.icon-btn{width:36px;height:36px;border-radius:10px;box-shadow:var(--ring);display:grid;place-items:center;color:var(--muted-foreground)}
+.icon-btn:hover{color:var(--foreground);box-shadow:var(--ring-hover)}
+.icon-btn svg{width:16px;height:16px}
+.view{padding:24px 32px 56px;max-width:1240px}
+h1{font-size:26px;font-weight:600;letter-spacing:-.7px;margin:0 0 4px}
+.lead{color:var(--muted-foreground);margin:0 0 22px;max-width:68ch}
+h2{font-size:17px;font-weight:500;letter-spacing:-.425px;margin:28px 0 12px}
+.grid{display:grid;gap:14px}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.card{background:var(--card);box-shadow:var(--ring);border-radius:14px;padding:16px;min-width:0}
+.kpi .k{font-size:13.5px;color:var(--muted-foreground)}
+.kpi .v{font-size:30px;font-weight:600;letter-spacing:-1px;margin-top:4px;font-variant-numeric:tabular-nums}
+.kpi .s{font-size:13px;color:var(--muted-foreground);margin-top:2px}
+.card h3{font-size:17px;font-weight:500;letter-spacing:-.425px;margin:0;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.card p{margin:6px 0 0;color:var(--muted-foreground);font-size:14.5px}
+.well{background:var(--secondary);border-radius:10px;padding:10px 12px;margin-top:12px;font-size:14px}
+.well span{color:var(--muted-foreground)}
+.meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px}
+.tag{display:inline-flex;align-items:center;gap:5px;height:24px;background:var(--muted);color:var(--muted-foreground);border-radius:999px;padding:0 8px;font-size:12.5px;white-space:nowrap}
+.mono{font:400 12.5px var(--mono);color:var(--muted-foreground)}
+.sev{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;white-space:nowrap}
+.sev::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.sev.critical{color:var(--danger)}.sev.high{color:var(--warning)}.sev.medium{color:var(--info)}.sev.low{color:var(--muted-foreground)}
+.notice{display:flex;gap:10px;align-items:flex-start;background:color-mix(in srgb,var(--warning) 10%,var(--card));border-radius:12px;padding:12px 14px;font-size:14.5px;margin-bottom:18px}
+.notice svg{width:18px;height:18px;flex:none;color:var(--warning);margin-top:1px}
+.ex{list-style:none;margin:12px 0 0;padding:0;font-size:13.5px}
+.ex li{padding:6px 0;border-top:1px solid var(--border);display:flex;gap:10px;align-items:baseline;min-width:0}
+.ex a{text-decoration:none;overflow-wrap:anywhere;min-width:0;flex:1}
+.ex a:hover{text-decoration:underline}
+.ex small{color:var(--muted-foreground);display:block;font-size:12.5px;overflow-wrap:anywhere}
+.board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start}
+.col{background:var(--secondary);border-radius:14px;padding:10px;display:grid;gap:10px}
+.col-h{display:flex;justify-content:space-between;padding:4px 6px;color:var(--muted-foreground);font-size:14px}
+.task h3{font-size:15.5px;letter-spacing:-.31px}
+.moves{display:flex;gap:6px;margin-top:12px}
+.moves button{height:30px;padding:0 10px;border-radius:9px;box-shadow:var(--ring);font-size:13px;color:var(--muted-foreground);background:var(--card)}
+.moves button:hover{color:var(--foreground);box-shadow:var(--ring-hover)}
+details summary{cursor:pointer;color:var(--muted-foreground);font-size:13.5px;margin-top:10px}
+.rail{display:grid;grid-template-columns:240px minmax(0,1fr);gap:18px;align-items:start}
+.filters{position:sticky;top:78px}
+.search{display:flex;align-items:center;gap:8px;height:40px;padding:0 12px;border-radius:12px;box-shadow:var(--ring);background:var(--card);margin-bottom:12px}
+.search svg{width:16px;height:16px;color:var(--icon);flex:none}
+.search input{border:0;background:none;outline:0;width:100%;font-size:14px}
+.filters .nav button{font-size:14.5px}
+.seg{display:inline-flex;box-shadow:var(--ring);border-radius:12px;padding:3px;gap:2px;margin-bottom:16px}
+.seg button{padding:5px 12px;border-radius:9px;color:var(--muted-foreground)}
+.seg button[aria-pressed=true]{background:var(--primary);color:var(--primary-foreground)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th{font-weight:500;color:var(--muted-foreground);text-align:left;padding:8px 10px;border-bottom:1px solid var(--border);white-space:nowrap;font-size:13px}
+td{padding:8px 10px;border-bottom:1px solid var(--border);overflow-wrap:anywhere}
+tr:last-child td{border-bottom:0}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.chart{position:relative;margin-top:10px}
+.chart svg{width:100%;height:auto;display:block;overflow:visible}
+.chart text{font:400 11px var(--mono);fill:var(--muted-foreground);letter-spacing:0}
+.tip{position:fixed;z-index:20;pointer-events:none;background:var(--card);box-shadow:var(--pop);border-radius:9px;padding:7px 10px;font-size:13px;opacity:0;transition:opacity .08s;max-width:260px}
+.tip b{font-weight:500}.tip span{color:var(--muted-foreground);display:block;font-size:12.5px}
+.bars{display:grid;gap:9px;margin-top:12px}
+.bar{display:grid;grid-template-columns:150px minmax(0,1fr) 48px;gap:10px;align-items:center;font-size:13.5px}
+.bar .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar .tr{height:10px}
+.bar .fl{height:10px;background:var(--bar);border-radius:0 4px 4px 0;min-width:2px}
+.bar.own .fl{background:var(--brand)}.bar.own .nm{font-weight:600}
+.bar.pin .fl{background:var(--foreground)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:12.5px;color:var(--muted-foreground)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.empty{color:var(--muted-foreground);padding:20px;text-align:center}
+@media(max-width:1000px){.board,.two{grid-template-columns:minmax(0,1fr)}.rail{grid-template-columns:minmax(0,1fr)}.filters{position:static}}
+@media(max-width:760px){.app{grid-template-columns:minmax(0,1fr)}.sidebar{position:static;height:auto;border-right:0;border-bottom:1px solid var(--border);padding:12px 16px}.brand{padding:0 0 10px}.sidebar>.side-label,.progress{display:none}.sidebar>.nav{flex-direction:row;overflow-x:auto;gap:4px;scrollbar-width:none;margin:0 -16px;padding:1px 16px}.sidebar>.nav button{width:auto;white-space:nowrap;flex:none}.header{padding:10px 16px;top:0}.stamp{display:none}.view{padding:18px 16px 40px}h1{font-size:23px}.bar{grid-template-columns:110px minmax(0,1fr) 42px}.filters .nav{max-height:190px;overflow:auto}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><span class="mark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 20v-6M12 20V9M19 20V4"/></svg></span><span id="site"></span></div>
+    <div class="side-label">Разделы</div>
+    <nav class="nav" id="nav"></nav>
+    <div class="progress"><div class="top"><span>Задачи</span><span id="pg-n"></span></div><div class="dots" id="pg-d"></div><small id="pg-s"></small></div>
+  </aside>
+  <main>
+    <header class="header">
+      <div class="crumb"><span>Отчёт</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg><b id="crumb"></b></div>
+      <div class="head-right"><span class="stamp" id="stamp"></span><button class="icon-btn" id="theme" aria-label="Сменить тему"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg></button></div>
+    </header>
+    <section class="view" id="view"></section>
+  </main>
+</div>
+<div class="tip" id="tip" role="status"></div>
+<script id="data" type="application/json">__DATA__</script>
+<script>
+const D=JSON.parse(document.getElementById('data').textContent);
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num=v=>Math.round(v||0).toLocaleString('ru-RU');
+const pct=(a,b)=>b?(100*a/b).toFixed(1).replace('.',',')+'%':'—';
+const pos=v=>v==null?'—':v.toFixed(1).replace('.',',');
+const safe=u=>/^https?:\/\//i.test(u)?u:'#';
+const full=u=>u.startsWith('/')?'https://'+D.site+u:u;
+const short=u=>u.replace(/^https?:\/\/(www\.)?/,'').replace(D.site,'')||'/';
+const store={get(k,f){try{return JSON.parse(localStorage.getItem(k))??f}catch{return f}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}};
+const ICON={over:'<path d="M3 13h8V3H3zM13 21h8V11h-8zM13 3v4h8V3zM3 21h8v-4H3z"/>',tasks:'<path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/>',tech:'<path d="M14.7 6.3a4 4 0 0 0-5 5L3 18l3 3 6.7-6.7a4 4 0 0 0 5-5l-2.6 2.6-2.4-.6-.6-2.4z"/>',yandex:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',google:'<path d="M3 3v18h18"/><path d="m7 15 4-5 3 3 5-7"/>',rivals:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>'};
+ICON.demand='<path d="M12 3v18"/><path d="m5 10 7-7 7 7"/><path d="M5 21h14"/>';
+ICON.metrika='<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>';
+const SEARCH='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>';
+const WARN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>';
+const SEV_TOTAL=s=>D.audit.filter(a=>a.severity===s).reduce((n,a)=>n+a.count,0);
+const VIEWS=[['over','Обзор',null],['tasks','Задачи',D.tasks.length],['tech','Техника',D.audit.length],...(D.sources.yandex?[['yandex','Яндекс',null]]:[]),...(D.sources.google?[['google','Google',null]]:[]),...(D.metrika?[['metrika','Метрика',null]]:[]),...(D.demand?[['demand','Спрос',null]]:[]),...(D.competitors.length?[['rivals','Конкуренты',null]]:[])];
+const ST=()=>store.get('seo-board-'+D.site,{});
+const stateOf=t=>ST()[t.id]||'todo';
+function setState(id,s){const b=ST();b[id]=s;store.set('seo-board-'+D.site,b);renderProgress();render()}
+function renderNav(){const cur=current();$('nav').innerHTML=VIEWS.map(([k,l,n])=>`<button data-v="${k}" ${k===cur?'aria-current="page"':''}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICON[k]}</svg>${l}${n!=null?`<span class="n">${n}</span>`:''}</button>`).join('')}
+function renderProgress(){const done=D.tasks.filter(t=>stateOf(t)==='done').length,doing=D.tasks.filter(t=>stateOf(t)==='doing').length;$('pg-n').textContent=done+' / '+D.tasks.length;$('pg-d').innerHTML=D.tasks.map((t,i)=>`<i class="${i<done?'on':''}"></i>`).join('');$('pg-s').textContent=doing+' в работе · '+(D.tasks.length-done-doing)+' осталось'}
+const current=()=>{const h=location.hash.slice(1);return VIEWS.some(v=>v[0]===h)?h:'over'};
+function sevTag(a){return `<span class="sev ${esc(a.severity||a.priority)}">${esc(a.label)}</span>`}
+function examples(list,withId){return `<ul class="ex">${list.map(e=>`<li><a href="${esc(safe(full(e.url)))}" target="_blank" rel="noopener">${esc(short(e.url))}${e.note?`<small>${esc(e.note)}</small>`:''}</a>${e.shows?`<span class="mono">${num(e.shows)} пок.</span>`:''}${withId?`<span class="mono">#${e.id}</span>`:''}</li>`).join('')}</ul>`}
+function taskCard(t,compact){const s=stateOf(t),mv={todo:[['doing','В работу']],doing:[['todo','Назад'],['done','Готово']],done:[['doing','Вернуть']]}[s];return `<article class="card task"><div class="meta" style="margin:0 0 8px">${sevTag(t)}${t.count?`<span class="mono">${num(t.count)}</span>`:''}</div><h3>${esc(t.title)}</h3><p>${esc(t.why)}</p><div class="well"><span>Что сделать:</span> ${esc(t.action)}</div><div class="meta"><span class="tag">${esc(t.source)}</span></div>${t.examples.length?`<details><summary>Примеры (${t.examples.length})</summary>${examples(t.examples)}</details>`:''}${compact?'':`<div class="moves">${mv.map(([v,l])=>`<button data-move="${esc(t.id)}" data-to="${v}">${l}</button>`).join('')}</div>`}</article>`}
+function tip(e,html){const t=$('tip');t.innerHTML=html;t.style.opacity=1;const r=t.getBoundingClientRect();let x=e.clientX+14,y=e.clientY-r.height-10;if(x+r.width>innerWidth-8)x=e.clientX-r.width-14;if(y<8)y=e.clientY+14;t.style.left=x+'px';t.style.top=y+'px'}
+const hideTip=()=>$('tip').style.opacity=0;
+const LINES={};
+function line(id,pts,unit){const W=640,H=190,L=44,R=10,T=10,B=24,max=Math.max(...pts.map(p=>p.v),1),min=Math.min(0,...pts.map(p=>p.v)),nice=Math.ceil(max/4/(10**Math.floor(Math.log10(max/4||1))))*(10**Math.floor(Math.log10(max/4||1)))*4||1,top=Math.max(nice,max),x=i=>L+(pts.length<2?0:i*(W-L-R)/(pts.length-1)),y=v=>T+(H-T-B)*(1-(v-min)/(top-min||1)),d=pts.map((p,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(p.v).toFixed(1)).join(' '),ticks=[0,.5,1].map(k=>min+(top-min)*k),step=Math.max(1,Math.ceil(pts.length/6));const lab=s=>s.slice(8)+'.'+s.slice(5,7);LINES[id]={pts,unit,W,L,R,T,H,B,top,min};return `<div class="chart" data-line="${id}"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(unit)} по дням"><title>${esc(unit)} по дням</title>${ticks.map(t=>`<line x1="${L}" x2="${W-R}" y1="${y(t)}" y2="${y(t)}" stroke="var(--border)"/><text x="${L-8}" y="${y(t)+4}" text-anchor="end">${num(t)}</text>`).join('')}${pts.map((p,i)=>i%step===0?`<text x="${x(i)}" y="${H-6}" text-anchor="middle">${lab(p.d)}</text>`:'').join('')}<path d="${d}" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><g class="mk" opacity="0"><line y1="${T}" y2="${H-B}" stroke="var(--subtle)"/><circle r="4.5" fill="var(--brand)" stroke="var(--card)" stroke-width="2"/></g><rect x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}" fill="transparent"/></svg></div>`}
+function bindCharts(){document.querySelectorAll('[data-line]').forEach(el=>{const c=LINES[el.dataset.line],svg=el.querySelector('svg'),mk=svg.querySelector('.mk');const X=i=>c.L+(c.pts.length<2?0:i*(c.W-c.L-c.R)/(c.pts.length-1)),Y=v=>c.T+(c.H-c.T-c.B)*(1-(v-c.min)/(c.top-c.min||1));svg.addEventListener('mousemove',e=>{const r=svg.getBoundingClientRect(),px=(e.clientX-r.left)/r.width*c.W,i=Math.max(0,Math.min(c.pts.length-1,Math.round((px-c.L)/((c.W-c.L-c.R)/Math.max(1,c.pts.length-1))))),p=c.pts[i];mk.setAttribute('opacity',1);mk.querySelector('line').setAttribute('x1',X(i));mk.querySelector('line').setAttribute('x2',X(i));mk.querySelector('circle').setAttribute('cx',X(i));mk.querySelector('circle').setAttribute('cy',Y(p.v));tip(e,`<b>${num(p.v)}</b><span>${esc(c.unit)} · ${esc(p.d)}</span>`)});svg.addEventListener('mouseleave',()=>{mk.setAttribute('opacity',0);hideTip()})});document.querySelectorAll('.bar').forEach(b=>{b.addEventListener('mousemove',e=>tip(e,`<b>${esc(b.dataset.n)}</b><span>Видимость ${esc(b.dataset.v)} · в топ-10: ${esc(b.dataset.t)}</span>`));b.addEventListener('mouseleave',hideTip)})}
+function bars(rows){const max=Math.max(...rows.map(r=>r.visibility),.001);return `<div class="bars">${rows.map(r=>`<div class="bar ${r.kind==='own'?'own':r.kind==='pinned'?'pin':''}" data-n="${esc(r.domain)}" data-v="${r.visibility.toFixed(3)}" data-t="${r.top10}"><span class="nm">${esc(r.domain)}</span><div class="tr"><div class="fl" style="width:${(100*r.visibility/max).toFixed(1)}%"></div></div><span class="mono num">${r.visibility.toFixed(2).replace('.',',')}</span></div>`).join('')}</div><div class="legend"><span><i style="background:var(--brand)"></i>Ваш сайт</span><span><i style="background:var(--foreground)"></i>Указанный конкурент</span><span><i style="background:var(--bar)"></i>Другие магазины</span></div>`}
+function staleNotice(s){return s&&s.stale?`<div class="notice">${WARN}<div>Данные источника «${esc(s.name)}» заканчиваются ${esc(s.until)}: это ${s.days_old} дн. назад. Причина пока не установлена.</div></div>`:''}
+function over(){const y=D.sources.yandex,g=D.sources.google,r=D.competitors[0],own=r&&r.focus.find(x=>x.kind==='own'),pin=r&&r.focus.find(x=>x.kind==='pinned'),urgent=D.tasks.filter(t=>stateOf(t)!=='done').slice(0,3);const kpi=(k,v,s)=>`<div class="card kpi"><div class="k">${k}</div><div class="v">${v}</div><div class="s">${s}</div></div>`;const rows=r?[...r.focus,...r.shops].sort((a,b)=>b.visibility-a.visibility).slice(0,8):[];return `<h1>${esc(D.site)}</h1><p class="lead">Сводка по техническому состоянию, поисковым показателям и конкурентам. Каждая задача ссылается на проверенные данные.</p>${staleNotice(y)}<div class="grid kpis">${y?kpi('Яндекс: показы и клики',num(y.shows)+' / '+num(y.clicks),esc(y.since+' — '+y.until)):''}${g?kpi('Google: показы и клики',num(g.shows)+' / '+num(g.clicks),esc(g.since+' — '+g.until)):''}${y&&y.summary.sqi!=null?kpi('ИКС · страниц в поиске',num(y.summary.sqi)+' · '+num(y.summary.searchable_pages_count),'Исключено: '+num(y.summary.excluded_pages_count)):''}${own?kpi('Запросов в топ-10 Яндекса',own.top10+' из '+r.queries,pin?esc(pin.domain)+': '+pin.top10:''):''}</div><h2>Сделать в первую очередь</h2><div class="grid">${urgent.map(t=>taskCard(t,true)).join('')||'<div class="card empty">Все задачи выполнены</div>'}</div><div class="grid two" style="margin-top:14px">${rows.length?`<div class="card"><h3>Видимость в Яндексе, ${esc(r.name)}</h3><p>Условный показатель по ${r.queries} запросам. ${r.demand_weighted?'Запросы взвешены по спросу.':'Спрос пока не учтён.'}</p>${bars(rows)}</div>`:''}${y&&y.in_search.length?`<div class="card"><h3>Страниц в поиске Яндекса</h3><p>Изменение за последние месяцы.</p>${line('inseach',y.in_search.map(p=>({d:p.date,v:p.value})),'Страниц в поиске')}</div>`:''}</div>`}
+function tasks(){const cols=[['todo','Сделать'],['doing','В работе'],['done','Готово']];return `<h1>Задачи</h1><p class="lead">Список составлен правилами по данным аудита, Вебмастера, Search Console и выдачи. Статусы сохраняются в этом браузере.</p><div class="board">${cols.map(([k,l])=>{const list=D.tasks.filter(t=>stateOf(t)===k);return `<div class="col"><div class="col-h"><span>${l}</span><span class="mono">${list.length}</span></div>${list.map(t=>taskCard(t)).join('')||'<div class="empty">Пусто</div>'}</div>`}).join('')}</div>`}
+let techF={sev:'all',q:''};
+function techList(){const q=techF.q.toLowerCase(),list=D.audit.filter(a=>(techF.sev==='all'||a.severity===techF.sev)&&(!q||a.title.toLowerCase().includes(q)||a.examples.some(e=>e.url.toLowerCase().includes(q))));return list.map(a=>`<article class="card"><div class="meta" style="margin:0 0 8px">${sevTag(a)}<span class="mono">${num(a.count)} стр.</span></div><h3>${esc(a.title)}</h3><div class="well"><span>Что сделать:</span> ${esc(a.advice)}</div><details ${a.count<=8?'open':''}><summary>Примеры страниц (${a.examples.length} из ${num(a.count)})</summary>${examples(a.examples.slice(0,30),true)}</details></article>`).join('')||'<div class="card empty">Ничего не найдено</div>'}
+function tech(){const c=D.crawl,opts=[['all','Все проблемы',D.audit.reduce((n,a)=>n+a.count,0)],['critical','Критично',SEV_TOTAL('critical')],['high','Высокий',SEV_TOTAL('high')],['medium','Средний',SEV_TOTAL('medium')],['low','Низкий',SEV_TOTAL('low')]];return `<h1>Технический аудит</h1><p class="lead">Запуск №${D.run} от ${esc(D.crawled_at)}. Проверено ${num(c.scheduled)} адресов, в sitemap ${num(c.sitemap_urls)}.${c.truncated?' Обход остановлен лимитом.':''} Полный список лежит в CSV рядом с отчётом.</p><div class="rail"><div class="filters"><label class="search">${SEARCH}<input id="tq" placeholder="Проблема или адрес" value="${esc(techF.q)}" aria-label="Поиск по проблемам"></label><div class="side-label">Приоритет</div><div class="nav">${opts.map(([k,l,n])=>`<button data-sev="${k}" ${techF.sev===k?'aria-current="page"':''}>${l}<span class="n">${num(n)}</span></button>`).join('')}</div></div><div class="grid" id="tl">${techList()}</div></div>`}
+function table(rows,head,fmt){return `<div class="scroll"><table><thead><tr>${head.map((h,i)=>`<th class="${i?'num':''}">${h}</th>`).join('')}</tr></thead><tbody>${rows.map(fmt).join('')}</tbody></table></div>`}
+const metricRow=(r,link)=>`<tr><td>${link?`<a href="${esc(safe(full(r.key)))}" target="_blank" rel="noopener">${esc(short(r.key))}</a>`:esc(r.key)}</td><td class="num">${num(r.shows)}</td><td class="num">${num(r.clicks)}</td><td class="num">${pct(r.clicks,r.shows)}</td><td class="num">${pos(r.position)}</td></tr>`;
+function source(k){const s=D.sources[k],H=['Запрос','Показы','Клики','CTR','Позиция'],P=['Страница','Показы','Клики','CTR','Позиция'],daily=s.daily.map(p=>({d:p.date,v:p.clicks})),shows=s.daily.map(p=>({d:p.date,v:p.shows}));return `<h1>${esc(s.name)}</h1><p class="lead">Период ${esc(s.since)} — ${esc(s.until)}. Показы ${num(s.shows)}, клики ${num(s.clicks)}.${s.local_shows?` ${esc(s.local_name)}: ${num(s.local_shows)} показов, ${num(s.local_clicks)} кликов.`:''}</p>${staleNotice(s)}${k==='yandex'&&s.problems.length?`<div class="grid" style="margin-bottom:14px">${s.problems.map(p=>`<div class="card"><div class="meta" style="margin:0"><span class="tag">${esc(p.label)}</span><span class="mono">${esc(p.code)}</span></div></div>`).join('')}</div>`:''}<div class="grid two"><div class="card"><h3>Клики по дням</h3>${line(k+'c',daily,'Клики')}</div><div class="card"><h3>Показы по дням</h3>${line(k+'s',shows,'Показы')}</div></div><h2>Главные запросы</h2><div class="card">${table(s.queries.slice(0,25),H,r=>metricRow(r))}</div><h2>Близко к топу: позиции 4–15</h2><div class="card">${table(s.close.slice(0,25),H,r=>metricRow(r))}</div><h2>Главные страницы</h2><div class="card">${table(s.pages.slice(0,25),P,r=>metricRow(r,true))}</div>`}
+const cnt=v=>v==null?'—':num(v);
+function demand(){const d=D.demand,own=v=>v==null?'нет в топ-30':v;return `<h1>Спрос в Яндексе</h1><p class="lead">Wordstat, последние 30 дней. Число показывает все запросы, содержащие слова фразы, поэтому общие формулировки включают и нецелевой спрос.</p><h2>Отслеживаемые запросы</h2><div class="card">${table(d.rows.slice(0,70),['Запрос',...d.regions.flatMap(g=>['Спрос, '+g.name,'Позиция'])],r=>`<tr><td>${esc(r.query)}</td>${r.regions.map(v=>`<td class="num">${cnt(v.demand)}</td><td class="num">${own(v.position)}</td>`).join('')}</tr>`)}</div><h2>Идеи из Вордстата · ${d.ideas.length}</h2><p class="lead" style="margin-bottom:12px">Фразы, которых ещё нет в списке. ${d.excluded.length?`Исключены фразы с основами: ${esc(d.excluded.join(', '))}. `:''}Перед созданием страницы проверьте, подходит ли фраза ассортименту.</p><div class="card">${table(d.ideas,['Фраза','Спрос','Найдено по запросу'],r=>`<tr><td>${esc(r.phrase)}</td><td class="num">${num(r.count)}</td><td class="num">${esc(r.origin)}</td></tr>`)}</div>`}
+const SRC={organic:'Поиск',direct:'Прямые заходы',referral:'Ссылки',ad:'Реклама',social:'Соцсети',internal:'Внутренние',messenger:'Мессенджеры',email:'Почта',recommend:'Рекомендации'};
+function metrika(){const m=D.metrika,goalNames=m.primary_goal||'нет',kpi=(k,v,s)=>`<div class="card kpi"><div class="k">${k}</div><div class="v">${v}</div><div class="s">${s}</div></div>`,row=(r,link)=>`<tr><td>${link?`<a href="${esc(safe(r.key))}" target="_blank" rel="noopener">${esc(short(r.key))}</a>`:esc(r.key||'—')}</td><td class="num">${num(r.visits)}</td><td class="num">${r.bounce==null?'—':r.bounce.toFixed(1).replace('.',',')+'%'}</td><td class="num">${num(r.goals)}</td><td class="num">${pct(r.goals,r.visits)}</td></tr>`;return `<h1>Яндекс Метрика</h1><p class="lead">Период ${esc(m.date1)} — ${esc(m.date2)}. Счётчик ${esc(m.counter)}.${m.sampled?' Часть отчётов построена по выборке.':''}</p>${m.orders_matched?'':`<div class="notice">${WARN}<div>Цель заказа не найдена${m.goals_total?': показаны первые доступные цели':''}. Для оценки продаж создайте цель оформления заказа в Метрике.</div></div>`}<div class="grid kpis">${kpi('Визиты из поиска',num(m.organic_visits),'За весь период')}${kpi('Главная цель из поиска',num(m.organic_goals),esc(goalNames))}${kpi('Конверсия из поиска',pct(m.organic_goals,m.organic_visits),'Достижения к визитам')}</div><div class="grid two" style="margin-top:14px;align-items:start"><div class="card"><h3>Визиты из поиска по дням</h3>${line('mv',m.daily.map(p=>({d:p.date,v:p.visits})),'Визиты')}</div><div class="card"><h3>Источники трафика</h3><div style="margin-top:8px">${table(m.sources.slice(0,8),['Источник','Визиты','Цели'],r=>`<tr><td>${esc(SRC[r.source]||r.source)}</td><td class="num">${num(r.visits)}</td><td class="num">${num(r.goals)}</td></tr>`)}</div></div></div><h2>Посадочные страницы из поиска</h2><div class="card">${table(m.landing,['Страница','Визиты','Отказы','Цели','Конверсия'],r=>row(r,true))}</div><h2>Поисковые системы</h2><div class="card">${table(m.engines,['Система','Визиты','Отказы','Цели','Конверсия'],r=>row(r))}</div>`}
+let region=0;
+function rivals(){const r=D.competitors[region],rows=[...r.focus,...r.shops].sort((a,b)=>b.visibility-a.visibility),H=['Домен','Видимость','В топ-10','Запросов','Позиция'];const row=x=>`<tr><td>${esc(x.domain)}</td><td class="num">${x.visibility.toFixed(3).replace('.',',')}</td><td class="num">${x.top10}</td><td class="num">${x.positions.length}</td><td class="num">${pos(x.avg)}</td></tr>`;return `<h1>Конкуренты в Яндексе</h1><p class="lead">Топ-30 выдачи по ${r.queries} запросам. Точные позиции по общим запросам приблизительны: выдача API отличается от браузерной.</p><div class="seg">${D.competitors.map((c,i)=>`<button data-region="${i}" aria-pressed="${i===region}">${esc(c.name)}</button>`).join('')}</div>${r.missing.length?`<div class="notice">${WARN}<div>Не найдены в топ-30: ${esc(r.missing.join(', '))}</div></div>`:''}<div class="grid two"><div class="card"><h3>Профильные магазины</h3><p>Видимость по запросам ниши.</p>${bars(rows.slice(0,12))}</div><div class="card"><h3>Маркетплейсы и справочники</h3><p>Для сравнения не используются.</p><div style="margin-top:8px">${table(r.others,H,row)}</div></div></div><h2>Конкурент в топ-10, вас нет в топ-30 · ${r.gaps.length}</h2><div class="card">${table(r.gaps.slice(0,40),['Запрос','Спрос','Конкурент','Позиция'],g=>`<tr><td>${esc(g.query)}</td><td class="num">${g.demand==null?'—':num(g.demand)}</td><td class="num"><a href="${esc(safe(g.url))}" target="_blank" rel="noopener">${esc(g.domain)}</a></td><td class="num">${g.position}</td></tr>`)}</div><h2>Близко к топу: позиции 4–20 · ${r.close.length}</h2><div class="card">${table(r.close.slice(0,40),['Запрос','Страница','Позиция'],c=>`<tr><td>${esc(c.query)}</td><td class="num"><a href="${esc(safe(c.url))}" target="_blank" rel="noopener">${esc(short(c.url))}</a></td><td class="num">${c.position}</td></tr>`)}</div>`}
+function render(){const v=current(),label=VIEWS.find(x=>x[0]===v)[1];$('crumb').textContent=label;renderNav();hideTip();$('view').innerHTML=v==='over'?over():v==='tasks'?tasks():v==='tech'?tech():v==='rivals'?rivals():v==='demand'?demand():v==='metrika'?metrika():source(v);bindCharts()}
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.v){location.hash=b.dataset.v}else if(b.dataset.move){setState(b.dataset.move,b.dataset.to)}else if(b.dataset.sev){techF.sev=b.dataset.sev;render()}else if(b.dataset.region){region=+b.dataset.region;render()}});
+document.addEventListener('input',e=>{if(e.target.id==='tq'){techF.q=e.target.value;$('tl').innerHTML=techList()}});
+addEventListener('hashchange',()=>{render();scrollTo(0,0)});
+const theme=store.get('seo-theme',matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.dataset.theme=theme;
+$('theme').onclick=()=>{const n=document.documentElement.dataset.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=n;store.set('seo-theme',n)};
+document.title='SEO: '+D.site;$('site').textContent=D.site;$('stamp').textContent='Данные на '+D.generated;renderProgress();render();
+</script>
+</body>
+</html>
