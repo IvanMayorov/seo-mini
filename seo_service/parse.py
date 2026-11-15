@@ -58,6 +58,8 @@ def parse_html(body: bytes, charset: str | None, url: str) -> tuple[dict, list[d
     images = soup.find_all("img")
     scripts = len(soup.find_all("script"))
     h1 = [_clean(h.get_text(" ")) for h in soup.find_all("h1")]
+    # Считаем до decompose: картинки внутри <noscript> теряют атрибуты при удалении тега.
+    images_no_alt = sum(1 for i in images if not _clean(i.get("alt")))
 
     for tag in soup(["script", "style", "noscript", "template"]):
         tag.decompose()
@@ -76,7 +78,7 @@ def parse_html(body: bytes, charset: str | None, url: str) -> tuple[dict, list[d
         "text_hash": hashlib.sha1(" ".join(words).lower().encode()).hexdigest(),
         "scripts": scripts,
         "images": len(images),
-        "images_no_alt": sum(1 for i in images if not _clean(i.get("alt"))),
+        "images_no_alt": images_no_alt,
         "has_viewport": int(has_viewport),
     }
     return page, list(links.values())
